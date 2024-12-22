@@ -1,0 +1,128 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Education Center</title>
+    <!-- Font Awesome -->
+<link
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+  rel="stylesheet"
+/>
+<!-- Google Fonts -->
+<link
+  href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+  rel="stylesheet"
+/>
+<!-- MDB -->
+<link
+  href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/8.1.0/mdb.min.css"
+  rel="stylesheet"
+/>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+<div class="container">
+                        <!--START NAVBAR-->
+<nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{% url 'asos' %}">Education Center</a>
+    <button
+      data-mdb-collapse-init
+      class="navbar-toggler"
+      type="button"
+      data-mdb-target="#navbarNavAltMarkup"
+      aria-controls="navbarNavAltMarkup"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        {% for course in courses %}
+        <a class="nav-link active" aria-current="page" href="{% url 'tanlangan' course.id %}">{{course.name}}</a>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</nav>
+                        <!--END NAVBAR-->
+                        <!--START MAIN-->
+<main class="mt-4 mb-4">
+<div class="card mb-3" style="max-width: 540px">
+  {% for course in courses %}
+  <div class="row g-0 mt-4 mb-4" style="background: linear-gradient(45deg,#0909b9,#ae1409); color: white">
+    <div class="col-md-4">
+      {% if course.photo %}
+      <img src="{{ course.photo.url }}" alt="Trendy Pants and Shoes" class="img-fluid rounded-start"/>
+      {% else %}
+      <img src="https://mdbcdn.b-cdn.net/wp-content/uploads/2020/06/vertical.webp" alt="Trendy Pants and Shoes" class="img-fluid rounded-start"/>
+      {% endif %}
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <h5 class="card-title">{{ course.name }}</h5>
+        <p class="card-text">
+          {{ course.content|truncatewords:20 }}
+        </p>
+        <p class="card-text">
+          <small class="text-muted">{{ course.created|date:"D d F Y" }}</small>
+        </p>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% for lesson in lessons %}
+<div class="card text-center mt-4" style="background: linear-gradient(45deg,#c33c03,#27760d); color: white">
+  <div class="card-header">{{ lesson.name }}</div>
+  <div class="card-body">
+    <h5 class="card-title">{{ lesson.name }}</h5>
+    <p class="card-text">{{lesson.content|truncatewords:20}}</p>
+    <a href="{% url 'batafsil' lesson.id %}" class="btn btn-success" data-mdb-ripple-init>Batafsil</a>
+  </div>
+  <div class="card-footer text-muted">{{ lesson.created }}</div>
+</div>
+{% endfor %}
+</main>
+                        <!--END MAIN-->
+                        <!--START FOOTER-->
+<section class="">
+  <!-- Footer -->
+  <footer class="text-center text-white" style="background: linear-gradient(45deg,#0909b9,#ae1409);">
+    <!-- Grid container -->
+    <div class="container p-4 pb-0">
+      <!-- Section: CTA -->
+      <section class="">
+        <p class="d-flex justify-content-center align-items-center">
+          <span class="me-3">Register for free</span>
+          <button data-mdb-ripple-init type="button" class="btn btn-outline-light btn-rounded">
+            Sign up!
+          </button>
+        </p>
+      </section>
+      <!-- Section: CTA -->
+    </div>
+    <!-- Grid container -->
+
+    <!-- Copyright -->
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+      © 2020 Copyright:
+      <a class="text-white" href="https://mdbootstrap.com/">MDBootstrap.com</a>
+    </div>
+    <!-- Copyright -->
+  </footer>
+  <!-- Footer -->
+</section>
+                        <!--END FOOTER-->
+
+<!-- MDB -->
+<script
+  type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/8.1.0/mdb.umd.min.js"
+></script>
+</div>
+</body>
+</html>
