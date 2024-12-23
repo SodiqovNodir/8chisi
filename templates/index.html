@@ -83,7 +83,7 @@
     <p class="card-text">{{lesson.content|truncatewords:20}}</p>
     <a href="{% url 'batafsil' lesson.id %}" class="btn btn-success" data-mdb-ripple-init>Batafsil</a>
   </div>
-  <div class="card-footer text-muted">{{ lesson.created }}</div>
+  <div class="card-footer text-muted" style="background-color: white">{{ lesson.created|date:"D d F Y" }}</div>
 </div>
 {% endfor %}
 </main>
@@ -97,9 +97,9 @@
       <!-- Section: CTA -->
       <section class="">
         <p class="d-flex justify-content-center align-items-center">
-          <span class="me-3">Register for free</span>
+          <span class="me-3">Ro'yxatdan o'tish</span>
           <button data-mdb-ripple-init type="button" class="btn btn-outline-light btn-rounded">
-            Sign up!
+            Kirish
           </button>
         </p>
       </section>
@@ -109,8 +109,8 @@
 
     <!-- Copyright -->
     <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
-      © 2020 Copyright:
-      <a class="text-white" href="https://mdbootstrap.com/">MDBootstrap.com</a>
+      © 2024 Yangilangan:
+      <a class="text-white" href="https://mdbootstrap.com/">EducationCenter.com</a>
     </div>
     <!-- Copyright -->
   </footer>
