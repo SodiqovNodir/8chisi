@@ -1,6 +1,3 @@
-import msilib
-
-from django.conf.global_settings import MEDIA_URL
 from django.db import models
 
 class Course(models.Model):
