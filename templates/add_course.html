@@ -5,7 +5,21 @@
     {% csrf_token %}
 
 
-    {{ courses.as_p }}
+    <p>
+    {{ course.name }}
+    </p>
+    <p>
+    {{ course.content }}
+    </p>
+    <p>
+    {% if photo %}
+    <a href="{{ photo.url }}">{{ photo }}</a>
+    {% endif %}
+    {{ course.photo }}
+    </p>
+    <p>
+    {{ course.created }}
+    </p>
 
     <button type="submit">Saqlash</button>
 

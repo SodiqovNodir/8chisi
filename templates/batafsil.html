@@ -3,6 +3,11 @@
 
 {% block main %}
 <div class="card text-center mt-4" style="background: linear-gradient(45deg,#c33c03,#27760d); color: white">
+
+    <div class="d-flex flex-row-reverse">
+        <a href="{{ url 'update_course' course.pk }}"><i class="fas fa-pen-to-square"></i></a>
+    </div>
+
   <div class="card-header">{{ lesson.name }}</div>
   <div class="card-body">
     <h5 class="card-title">{{ lesson.name }}</h5>

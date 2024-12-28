@@ -1,5 +1,5 @@
 from django.core.handlers.wsgi import WSGIRequest
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 
 from news.models import Course, Lesson
 from .forms import CourseForm, LessonForm
@@ -55,3 +55,63 @@ def add_lesson(request: WSGIRequest):
         'lessons' : lessons,
     }
     return render(request, 'add_lesson.html', context = contexts)
+
+def update_course(request:WSGIRequest, course_id):
+    
+    course = get_object_or_404(Course, pk = course_id)
+
+    if request.method == 'POST':
+        form = CourseForm(data=request.POST, files=request.FILES)
+        if form.is_valid():
+            course.name = form.cleaned_data.get('name')
+            course.content = form.cleaned_data.get('content')
+            course.photo = form.cleaned_data.get('photo') if form.cleaned_data.get('photo') else course.rasm
+            course.created = form.cleaned_data.get('created')
+            course.save()
+
+
+    form = CourseForm(initial={
+        'name': course.name,
+        'photo': course.photo,
+        'content':course.content,
+        'created': course.created,
+    })
+
+    contexts = {
+        'form' : form,
+        'photo':course.photo
+    }
+    return render(request, 'add_gul.html', context = contexts)
+
+
+def update_lesson(request:WSGIRequest, lesson_id):
+    lesson = get_object_or_404(Lesson, pk = lesson_id)
+
+    if request.method == 'POST':
+        form = LessonForm(data=request.POST, files=request.FILES)
+        if form.is_valid():
+            lesson.nomi = form.cleaned_data.get('nomi')
+            lesson.malumot = form.cleaned_data.get('malumot')
+            lesson.rasm = form.cleaned_data.get('rasm') if form.cleaned_data.get('rasm') else course.rasm
+            lesson.created = form.cleaned_data.get('created')
+            lesson.coursei = form.cleaned_data.get('coursei')
+            lesson.save()
+
+
+    form = LessonForm(initial={
+        'name': lesson.name,
+        'content':lesson.content,
+        'created': lesson.created,
+        'course': lesson.course
+    })
+
+    contexts = {
+        'form' : form,
+    }
+    return render(request, 'add_gul.html', context = contexts)
+
+
+
+
+
+
