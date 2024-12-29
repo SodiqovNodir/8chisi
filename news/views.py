@@ -1,8 +1,11 @@
 from django.core.handlers.wsgi import WSGIRequest
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.models import User
+from django.contrib.auth import login, logout, authenticate
+from django.contrib import messages
 
 from news.models import Course, Lesson
-from .forms import CourseForm, LessonForm
+from .forms import CourseForm, LessonForm, RegisterForm, LoginForm
 
 def asosiy(request: WSGIRequest):
     courses = Course.objects.all()
@@ -110,6 +113,43 @@ def update_lesson(request:WSGIRequest, lesson_id):
     return render(request, 'add_lesson.html', context = contexts)
 
 
+def register(request):
+    if request.method == 'POST':
+        form = RegisterForm(data=request.POST)
+        if form.is_valid():
+            password = form.cleaned_data.get('password')
+            password_repeat = form.cleaned_data.get('password_repeat')
+            if password_repeat == password:
+                user = User.objects.create_user(
+                    form.cleaned_data.get('username'),
+                    form.cleaned_data.get('email'),
+                    password
+                )
+                messages.success(request, 'Akount yaratildi 😍🥰')
+                return redirect('login_user')
+    context = {
+            'form': RegisterForm()
+    }
+    return render(request, 'auth/register.html', context)
+
+def login_user(request):
+    if request.method == 'POST':
+        form = LoginForm(data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username = username, password = password)
+            messages.success(request, 'Xush kelibsiz😍☺️')
+            login(request, user)
+            return redirect('asos')
+    context = {
+        'form':LoginForm(),
+    }
+    return render(request, 'auth/login.html', context)
+
+def logout_user(request):
+    logout(request)
+    return redirect('login_user')
 
 
 
