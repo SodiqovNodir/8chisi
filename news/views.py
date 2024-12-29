@@ -81,7 +81,7 @@ def update_course(request:WSGIRequest, course_id):
         'form' : form,
         'photo':course.photo
     }
-    return render(request, 'add_gul.html', context = contexts)
+    return render(request, 'add_course.html', context = contexts)
 
 
 def update_lesson(request:WSGIRequest, lesson_id):
@@ -90,11 +90,10 @@ def update_lesson(request:WSGIRequest, lesson_id):
     if request.method == 'POST':
         form = LessonForm(data=request.POST, files=request.FILES)
         if form.is_valid():
-            lesson.nomi = form.cleaned_data.get('nomi')
-            lesson.malumot = form.cleaned_data.get('malumot')
-            lesson.rasm = form.cleaned_data.get('rasm') if form.cleaned_data.get('rasm') else course.rasm
+            lesson.name = form.cleaned_data.get('name')
+            lesson.content = form.cleaned_data.get('content')
             lesson.created = form.cleaned_data.get('created')
-            lesson.coursei = form.cleaned_data.get('coursei')
+            lesson.course = form.cleaned_data.get('course')
             lesson.save()
 
 
@@ -108,7 +107,7 @@ def update_lesson(request:WSGIRequest, lesson_id):
     contexts = {
         'form' : form,
     }
-    return render(request, 'add_gul.html', context = contexts)
+    return render(request, 'add_lesson.html', context = contexts)
 
 
 

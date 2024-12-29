@@ -1,4 +1,4 @@
-from news.views import asosiy, tanlangan, batafsil, add_course, add_lesson
+from news.views import asosiy, tanlangan, batafsil, add_course, add_lesson, update_course, update_lesson
 from django.urls import path
 
 urlpatterns = [
