@@ -4,8 +4,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 
-from news.models import Course, Lesson
-from .forms import CourseForm, LessonForm, RegisterForm, LoginForm
+from news.models import Course, Lesson, Comment
+from .forms import CourseForm, LessonForm, RegisterForm, LoginForm, CommentForm
 
 def asosiy(request: WSGIRequest):
     courses = Course.objects.all()
@@ -86,7 +86,6 @@ def update_course(request:WSGIRequest, course_id):
     }
     return render(request, 'add_course.html', context = contexts)
 
-
 def update_lesson(request:WSGIRequest, lesson_id):
     lesson = get_object_or_404(Lesson, pk = lesson_id)
 
@@ -111,7 +110,6 @@ def update_lesson(request:WSGIRequest, lesson_id):
         'form' : form,
     }
     return render(request, 'add_lesson.html', context = contexts)
-
 
 def register(request):
     if request.method == 'POST':
@@ -150,6 +148,59 @@ def login_user(request):
 def logout_user(request):
     logout(request)
     return redirect('login_user')
+
+def comment_save(request:WSGIRequest, lesson_id):
+    if request.user.authenticated:
+        if request.method == "POST":
+            comment = CommentForm(data=request.POST)
+            if comment.is_valid():
+                lesson = get_object_or_404(Lesson, pk = lesson_id)
+                com = Comment.objects.create(
+                    text = lesson.cleaned_data.get('text'),
+                    author = request.user,
+                    lesson = lesson,
+                )
+                messages.success(request, "Comment qo'shildi.")
+
+        return redirect("batafsil", lesson_id = lesson_id)
+    messages.error(request, "Avval ro'yhatdan o'ting")
+    return redirect('login_user')
+
+def comment_delete(request, comment_id):
+    if request.user.is_aauthenticated:
+        comment = get_object_or_404(Comment, pk = comment_id)
+        if request.user == comment.author or request.user.is_superuser:
+            lesson_id = comment.lesson.pk
+            comment.delete()
+            messages.success(request, "Comment o'chirildi")
+            return redirect('batafsil', lessom_id = lesson_id)
+
+    messages.error(request, "Avval ro'yhatdan o'ting")
+    return redirect('login_user')
+
+def update_comment(request:WSGIRequest, comment_id):
+    comment = get_object_or_404(Comment, pk = comment_id)
+
+    if request.method == 'POST':
+        form = CommentForm(data=request.POST, files=request.FILES)
+        if form.is_valid():
+            comment.author = form.cleaned_data.get('author')
+            comment.text = form.cleaned_data.get('text')
+            comment.created = form.cleaned_data.get('created')
+            comment.lesson = form.cleaned_data.get('lesson')
+            comment.save()
+
+    form = CommentForm(initial={
+        'author': comment.author,
+        'text':comment.text,
+        'created': comment.created,
+        'lesson': comment.lesson,
+    })
+
+    contexts = {
+        'form' : form,
+    }
+    return render(request, 'add_gul.html', context = contexts)
 
 
 

@@ -2,7 +2,8 @@ from django.contrib import admin
 from django.utils.safestring import mark_safe
 
 
-from .models import Course, Lesson
+from .models import Course, Lesson, Comment
+
 
 class CourseAdmin(admin.ModelAdmin):
     list_display = ('name', 'get_photo','created')
@@ -25,3 +26,4 @@ class LessonAdmin(admin.ModelAdmin):
     search_fields = ('name', 'content', 'created')
 
 admin.site.register(Lesson, LessonAdmin)
+admin.site.register(Comment)

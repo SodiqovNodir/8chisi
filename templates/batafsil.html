@@ -5,7 +5,7 @@
 
 <div class="d-flex flex-row-reverse">
         <a href="{% url 'update_lesson' lesson.pk %}"><i class="fas fa-pen-to-square" style="color: white;"></i></a>
-    </div>
+</div>
 
 <div class="card text-center mt-4" style="background: linear-gradient(45deg,#c33c03,#27760d); color: white">
   <div class="card-header">{{ lesson.name }}</div>
@@ -15,5 +15,44 @@
   </div>
   <div class="card-footer text-muted" style="background-color: white">{{ lesson.created|date:"D d F Y" }}</div>
 </div>
+
+{% if request.user.is_authenticated %}
+<form method="post" action="#">
+    {% csrf_token %}
+
+    {{ comment.as_p }}
+
+    <button type="submit" class="btn btn-success">Saqlash</button>
+
+</form>
+{% else %}
+<div style="color:red">
+<h3>Comment qoldirmoqchi bo'lsangiz ro'yxatdan o'ting
+    <a href="{% url 'login_user' %}" style="color:blue">Login</a>
+</h3>
+</div>
+{% endif %}
+
+<div class="d-flex justify-content-end mb-3">
+    <a href="#" class="fas fa-pen-to-square" style="color:white;"></a>
+</div>
+
+{% for c in com%}
+<div class="card text-center mt-3 mb-3">
+  <div class="card-header">
+      {{ c.author.username }}<br>
+      {% if request.user == comment.author or request.user.is_superuser %}
+      <a href="{% url 'comment_delete' comment.pk %}">O'chirish</a>
+      {% endif %}
+  </div>
+
+  <div class="card-body">
+    <h5 class="card-title">{{ c.text }}</h5>
+  </div>
+  <div class="card-footer text-muted">{{ c.created|date:"D d F Y" }}</div>
+</div>
+{% endfor %}
+
+
 {% endblock main %}
 
